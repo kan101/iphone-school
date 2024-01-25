@@ -39,11 +39,11 @@ class CommentWrittenListener
                 $this->createAchievement($user, $achievementDetails['next'], 'comments_written', $commentsCount);
             }
         } else {
-            $this->createAchievement($user, 'first_comment_written', 'comments_written', 1, $achievementDetails['name']);
+            $this->createAchievement($user, 'first_comment_written', 'comments_written', 1, 'First Comment Written');
         }
     }
 
-    private function createAchievement(User $user, string $achievementKey, string $achievementType, integer $milestone, string $achievementName)
+    private function createAchievement(User $user, string $achievementKey, string $achievementType, int $milestone, string $achievementName)
     {
         $achievement = new Achievement([
             'user_id' => $user->id,
@@ -54,7 +54,6 @@ class CommentWrittenListener
 
         $achievement->save();
         event(new AchievementUnlocked($achievementName, $user));
-
     }
 
     private function getAchievementDetails(string $achievementType, string $achievementKey): ?array
