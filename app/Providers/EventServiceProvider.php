@@ -8,6 +8,8 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Event;
 use App\Events\CommentWritten;
 use App\Listeners\CommentWrittenListener;
+use App\Events\LessonWactched;
+use App\Listeners\LessonWactchedListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         CommentWritten::class => [
             CommentWrittenListener::class,
+        ],
+        LessonWatched::class => [
+            LessonWatchedListener::class,
         ],
     ];
 
