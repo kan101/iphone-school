@@ -33,31 +33,13 @@ class CommentWrittenListener
 
         if ($latestAchievement) {
             /* Check if the user has reached the next milestone */
-            $achievementDetails = $this->getAchievementDetails('comments_written', $latestAchievement->achievementKey);
+            $achievementDetails = $user->getAchievementDetails('comments_written', $latestAchievement->achievement_key);
 
             if ($commentsCount == $achievementDetails['next_milestone']) {
-                $this->createAchievement($user, $achievementDetails['next'], 'comments_written', $commentsCount);
+                $user->createAchievement($achievementDetails['next'], 'comments_written', $commentsCount);
             }
         } else {
-            $this->createAchievement($user, 'first_comment_written', 'comments_written', 1, 'First Comment Written');
+            $user->createAchievement('first_comment_written', 'comments_written', 1, 'First Comment Written');
         }
-    }
-
-    private function createAchievement(User $user, string $achievementKey, string $achievementType, int $milestone, string $achievementName)
-    {
-        $achievement = new Achievement([
-            'user_id' => $user->id,
-            'achievement_key' => $achievementKey,
-            'achievement_type' => $achievementType,
-            'current_milestone' => $milestone,
-        ]);
-
-        $achievement->save();
-        event(new AchievementUnlocked($achievementName, $user));
-    }
-
-    private function getAchievementDetails(string $achievementType, string $achievementKey): ?array
-    {
-        return Config::get("achievements.{$achievementType}.{$achievementKey}");
     }
 }

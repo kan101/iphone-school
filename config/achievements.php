@@ -19,9 +19,9 @@ return [
     ],
 
     'badges' => [
-        'beginner' => ['name' => 'Beginner', 'achievements' => 0, 'next' => 'Intermediate'],
-        'intermediate' => ['name' => 'Intermediate', 'achievements' => 4, 'next' => 'Advanced'],
-        'advanced' => ['name' => 'Advanced', 'achievements' => 8, 'next' => 'Master'],
+        'beginner' => ['name' => 'Beginner', 'achievements' => 0, 'next' => 'intermediate'],
+        'intermediate' => ['name' => 'Intermediate', 'achievements' => 4, 'next' => 'advanced'],
+        'advanced' => ['name' => 'Advanced', 'achievements' => 8, 'next' => 'master'],
         'master' => ['name' => 'Master', 'achievements' => 10, 'next' => null], // No next badge
     ],
 

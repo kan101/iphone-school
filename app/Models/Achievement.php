@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
 
 class Achievement extends Model
 {
@@ -14,7 +14,7 @@ class Achievement extends Model
         'user_id',
         'achievement_key',
         'achievement_type',
-        'current_milestone'
+        'current_milestone',
     ];
 
     /**
@@ -23,5 +23,18 @@ class Achievement extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getAchievementNamesByKeys($keys)
+    {
+        $names = [];
+
+        foreach ($keys as $key) {
+            if (isset($achievements[$key])) {
+                $names[] = $achievements[$key]['name'];
+            }
+        }
+
+        return $names;
     }
 }

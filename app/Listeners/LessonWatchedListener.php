@@ -35,31 +35,13 @@ class LessonWatchedListener
 
         if ($latestAchievement) {
             /* Check if the user has reached the next milestone */
-            $achievementDetails = $this->getAchievementDetails('lessons_watched', $latestAchievement->achievementKey);
+            $achievementDetails = $user->getAchievementDetails('lessons_watched', $latestAchievement->achievement_key);
 
             if ($lessonsCount == $achievementDetails['next_milestone']) {
-                $this->createAchievement($user, $achievementDetails['next'], 'lessons_watched', $lessonsCount);
+                $user->createAchievement($achievementDetails['next'], 'lessons_watched', $lessonsCount);
             }
         } else {
-            $this->createAchievement($user, 'first_lesson_watched', 'lessons_watched', 1, 'First Lesson Watched');
+            $user->createAchievement('first_lesson_watched', 'lessons_watched', 1, 'First Lesson Watched');
         }
-    }
-
-    private function createAchievement(User $user, string $achievementKey, string $achievementType, int $milestone, string $achievementName)
-    {
-        $achievement = new Achievement([
-            'user_id' => $user->id,
-            'achievement_key' => $achievementKey,
-            'achievement_type' => $achievementType,
-            'current_milestone' => $milestone,
-        ]);
-
-        $achievement->save();
-        event(new AchievementUnlocked($achievementName, $user));
-    }
-
-    private function getAchievementDetails(string $achievementType, string $achievementKey): ?array
-    {
-        return Config::get("achievements.{$achievementType}.{$achievementKey}");
     }
 }
