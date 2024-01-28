@@ -36,7 +36,7 @@ class CommentWrittenListener
             $achievementDetails = $user->getAchievementDetails('comments_written', $latestAchievement->achievement_key);
 
             if ($commentsCount == $achievementDetails['next_milestone']) {
-                $user->createAchievement($achievementDetails['next'], 'comments_written', $commentsCount);
+                $user->createAchievement($achievementDetails['next'], 'comments_written', $commentsCount, $achievementDetails['next']['name']);
             }
         } else {
             $user->createAchievement('first_comment_written', 'comments_written', 1, 'First Comment Written');

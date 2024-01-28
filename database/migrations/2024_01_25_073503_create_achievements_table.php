@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('achievement_key');
             $table->string('achievement_type');
+            $table->string('achievement_name');
             $table->unsignedInteger('current_milestone');
         });
     }

@@ -142,9 +142,7 @@ class User extends Authenticatable
     public function nextAchievement(string $achievementType)
     {
         $latestAchievement = Achievement::where('user_id', $this->id)
-            ->where('achievement_type', $achievementType)
-            ->latest()
-            ->first();
+            ->where('achievement_type', $achievementType)->orderBy('current_milestone', 'desc')->first();
 
         if (is_null($latestAchievement)) {
             if ($achievementType == 'comments_written') {
@@ -157,7 +155,7 @@ class User extends Authenticatable
             $nextAchievement = $this->getAchievementDetails($achievementType, $achievementDetails['next']);
         }
 
-        if(!is_null($nextAchievement)) {
+        if (!is_null($nextAchievement)) {
             return $nextAchievement['name'];
         } else {
             return null;
@@ -170,6 +168,7 @@ class User extends Authenticatable
             'user_id' => $this->id,
             'achievement_key' => $achievementKey,
             'achievement_type' => $achievementType,
+            'achievement_name' => $achievementName,
             'current_milestone' => $milestone,
         ]);
 

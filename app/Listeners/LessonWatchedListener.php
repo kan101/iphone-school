@@ -38,7 +38,7 @@ class LessonWatchedListener
             $achievementDetails = $user->getAchievementDetails('lessons_watched', $latestAchievement->achievement_key);
 
             if ($lessonsCount == $achievementDetails['next_milestone']) {
-                $user->createAchievement($achievementDetails['next'], 'lessons_watched', $lessonsCount);
+                $user->createAchievement($achievementDetails['next'], 'lessons_watched', $lessonsCount, $achievementDetails['next']['name']);
             }
         } else {
             $user->createAchievement('first_lesson_watched', 'lessons_watched', 1, 'First Lesson Watched');
