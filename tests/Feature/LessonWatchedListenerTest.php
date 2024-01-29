@@ -28,7 +28,8 @@ class LessonWatchedListenerTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $this->create_prior_achievement($user, 'first_lesson_watched', 1, 'First Lesson Watched');
+        /* setup test database with achievement before the one being tested */
+        $this->create_achievement($user, 'first_lesson_watched', 'lessons_watched', 1, 'First Lesson Watched');
         $this->create_test_for_achievement('5 Lessons Watched', 5, $user);
     }
 
@@ -37,7 +38,7 @@ class LessonWatchedListenerTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $this->create_prior_achievement($user, 'five_lessons_watched', 5, '5 Lessons Watched');
+        $this->create_achievement($user, 'five_lessons_watched', 'lessons_watched', 5, '5 Lessons Watched');
         $this->create_test_for_achievement('10 Lessons Watched', 10, $user);
     }
 
@@ -46,7 +47,7 @@ class LessonWatchedListenerTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $this->create_prior_achievement($user, 'ten_lessons_watched', 10, '10 Lessons Watched');
+        $this->create_achievement($user, 'ten_lessons_watched', 'lessons_watched', 10, '10 Lessons Watched');
         $this->create_test_for_achievement('25 Lessons Watched', 25, $user);
     }
 
@@ -55,24 +56,13 @@ class LessonWatchedListenerTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $this->create_prior_achievement($user, 'twenty_five_lessons_watched', 25, '25 Lessons Watched');
+        $this->create_achievement($user, 'twenty_five_lessons_watched', 'lessons_watched', 25, '25 Lessons Watched');
         $this->create_test_for_achievement('50 Lessons Watched', 50, $user);
-    }
-
-    public function create_prior_achievement(User $user, string $achievement_key, int $current_milestone, string $achievement_name)
-    {
-        $achievements = Achievement::factory()->create([
-            'user_id' => $user->id,
-            'achievement_key' => $achievement_key,
-            'achievement_type' => 'lessons_watched',
-            'current_milestone' => $current_milestone,
-            'achievement_name' => $achievement_name,
-        ]);
     }
 
     public function create_test_for_achievement(string $achievement_name, int $milestone, User $user)
     {
-        Event::fake();
+        Event::fake([AchievementUnlocked::class]);
 
         $lessons = Lesson::factory()->count($milestone - 1)->create();
         $lessons->each(function ($lesson) use ($user) {
@@ -83,7 +73,7 @@ class LessonWatchedListenerTest extends TestCase
         $user->watched()->attach($lesson, ['watched' => true]);
 
         $event = new LessonWatched($lesson, $user);
-        $listener = new LessonWatchedListener();
+        $listener = app(LessonWatchedListener::class);
         $listener->handle($event);
 
         $this->assertDatabaseHas('achievements', [

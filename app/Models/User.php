@@ -11,7 +11,6 @@ use App\Models\Lesson;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Config;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -85,14 +84,18 @@ class User extends Authenticatable
     {
         $achievementCount = $this->achievements()->count();
 
-        $currentBadge = $this->getCurrentBadge();
+        $milestones = [10, 8, 4, 0];
+
+        if (in_array($achievementCount, $milestones)) {
+            $this->triggerBadgeUnlocked($achievementCount);
+        }
+    }
+
+    public function triggerBadgeUnlocked(int $achievementCount)
+    {
         $badge = $this->determineBadge($achievementCount);
         $badge_name = $badge['name'];
-
-        /* check if the user already has this badge to avoid firing the event unnecessarily */
-        if ($currentBadge !== $badge_name) {
-            event(new BadgeUnlocked($badge_name, $this));
-        }
+        event(new BadgeUnlocked($badge_name, $this));
     }
 
     public function determineBadge(int $achievementCount): ?array
@@ -124,7 +127,6 @@ class User extends Authenticatable
             return 0;
         }
 
-        /* Get the details of the next badge */
         $nextBadgeDetails = $this->getAchievementDetails('badges', $nextBadgeKey);
 
         $achievementsForNextBadge = $nextBadgeDetails['achievements'] ?? 0;
@@ -146,17 +148,17 @@ class User extends Authenticatable
 
         if (is_null($latestAchievement)) {
             if ($achievementType == 'comments_written') {
-                $nextAchievement = $this->getAchievementDetails($achievementType, 'first_comment_written');
+                $achievement = $this->getAchievementDetails($achievementType, 'first_comment_written');
             } else {
-                $nextAchievement = $this->getAchievementDetails($achievementType, 'first_lesson_watched');
+                $achievement = $this->getAchievementDetails($achievementType, 'first_lesson_watched');
             }
         } else {
             $achievementDetails = $this->getAchievementDetails($achievementType, $latestAchievement->achievement_key);
-            $nextAchievement = $this->getAchievementDetails($achievementType, $achievementDetails['next']);
+            $achievement = $this->getAchievementDetails($achievementType, $achievementDetails['next']);
         }
 
-        if (!is_null($nextAchievement)) {
-            return $nextAchievement['name'];
+        if (!is_null($achievement)) {
+            return $achievement['name'];
         } else {
             return null;
         }
@@ -179,7 +181,7 @@ class User extends Authenticatable
 
     public function getAchievementDetails(string $achievementType, string $achievementKey): ?array
     {
-        return Config::get("achievements.{$achievementType}.{$achievementKey}");
+        return config("achievements.{$achievementType}.{$achievementKey}");
     }
 
 }
