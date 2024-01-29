@@ -3,8 +3,8 @@
 return [
 
     'lessons_watched' => [
-        'first_lesson_watched' => ['name' => 'First Lesson Watched', 'milestone' => 1, 'next' => 'five_lessons_watched', 'next_milestone' => 10],
-        'five_lessons_watched' => ['name' => '5 Lessons Watched', 'milestone' => 5, 'next' => 'ten_lessons_watched', 'next_milestone' => 20],
+        'first_lesson_watched' => ['name' => 'First Lesson Watched', 'milestone' => 1, 'next' => 'five_lessons_watched', 'next_milestone' => 5],
+        'five_lessons_watched' => ['name' => '5 Lessons Watched', 'milestone' => 5, 'next' => 'ten_lessons_watched', 'next_milestone' => 10],
         'ten_lessons_watched' => ['name' => '10 Lessons Watched', 'milestone' => 10, 'next' => 'twenty_five_lessons_watched', 'next_milestone' => 25],
         'twenty_five_lessons_watched' => ['name' => '25 Lessons Watched', 'milestone' => 25, 'next' => 'fifty_lessons_watched', 'next_milestone' => 50],
         'fifty_lessons_watched' => ['name' => '50 Lessons Watched', 'milestone' => 50, 'next' => null, 'next_milestone' => null], // No next achievement
