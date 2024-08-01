@@ -1,66 +1,97 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Back-end Developer Test
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Timeline
+- Expect to spend 4-6 hours working on the assignment
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Scenario
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Achievements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Our customers unlock free, purchased courses in our Course Portal.
+Upon each unlocked course, a user also unlocks achievements.
 
-## Learning Laravel
+#### Lesson Watched Achievements
+- 1 Lesson Watched
+- 5 Lessons Watched
+- 10 Lessons Watched
+- 25 Lessons Watched
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+#### Comments Written Achievements
+- 1 Comment Written
+- 5 Comments Written
+- 10 Comments Written
+- 25 Comments Written
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+User can have a badge, this is determined by the number of achievements they have unlocked.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+#### Badges Achievements
+- Novice: 1-4 achievements
+- Advanced: 5-8 achievements
+- Specialist: 9 achievements
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Your Assignment
 
-### Premium Partners
+### Unlocking Achievements
+You need to write the code that listens to user events and unlocks the relevant achievements.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+For example:
+- When a user has commented for the first time you unlock the "1st Comment Written" achievement.
+- When a user has already unlocked the "First Lesson Watched" achievement by watching a single lesson they watch another four lessons they unlock the "5 Lessons Watched" achievement.
 
-## Contributing
+### Achievement Unlocked Event
+When an achievement is unlocked an AchievementUnlocked event must be fired with a payload of:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-## Code of Conduct
+{
+  "user": {User},
+  "achievement": {Achievement}
+}
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Badge Unlocked Event
+When a user unlocks enough achievements to earn a new badge a BadgeUnlocked event must be fired with a payload of:
 
-## Security Vulnerabilities
+{
+  "user": {User},
+  "badge": {Badge}
+}
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+## Achievement Blueprint
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+There are three fields in an achievement; these can be found in the `api/achievements` folder in the mock data file:
+
+- `name` (type: string)
+- `description` (type: string)
+- `value` (type: int) - the user's unlocked achievements by name
+
+## Badge Blueprint
+
+- `name` (type: string)
+- `max_level` (type: int)
+- `achievements_needed` (type: int) - the number of achievements the user must unlock to earn the next badge
+
+## Test Coverage
+
+You should write tests that cover all possible scenarios.
+
+Laravel HTTP tests documentation can be found at the following url: [https://laravel.com/docs/8.x/http-tests](https://laravel.com/docs/8.x/http-tests)
+
+---
+
+### User Events
+
+The following event methods are available on the user model:
+
+- `watchLesson()`
+- `writeComment()`
+  This will return an eloquent relationship for lessons watched by a user.
+
+- `unwatchLesson()`
+- `removeComment()`
+  This will return an eloquent relationship for comments written by a user.
+
+---
