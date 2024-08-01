@@ -17,14 +17,14 @@ class CommentWrittenListenerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function test_listener_creates_achievement_on_first_comment_written()
+    public function it_creates_achievement_on_first_comment_written()
     {
         $user = User::factory()->create();
         $this->create_test_for_achievement('First Comment Written', 1, $user);
     }
 
     /** @test */
-    public function test_listener_creates_achievement_on_three_comments_written()
+    public function it_creates_achievement_on_three_comments_written()
     {
         $user = User::factory()->create();
 
@@ -34,7 +34,7 @@ class CommentWrittenListenerTest extends TestCase
     }
 
     /** @test */
-    public function test_listener_creates_achievement_on_five_comments_written()
+    public function it_creates_achievement_on_five_comments_written()
     {
         $user = User::factory()->create();
 
@@ -43,7 +43,7 @@ class CommentWrittenListenerTest extends TestCase
     }
 
     /** @test */
-    public function test_listener_creates_achievement_on_ten_comments_written()
+    public function it_creates_achievement_on_ten_comments_written()
     {
         $user = User::factory()->create();
 
@@ -52,7 +52,7 @@ class CommentWrittenListenerTest extends TestCase
     }
 
     /** @test */
-    public function test_listener_creates_achievement_on_twenty_comments_written()
+    public function it_creates_achievement_on_twenty_comments_written()
     {
         $user = User::factory()->create();
 
